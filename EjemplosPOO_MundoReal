@@ -1,1 +1,52 @@
 git clone <https://github.com/Educampovalencia/2425-POO-CampoverdeEduardo.git>
+# Sistema de Reservas utilizando Programación Orientada a Objetos
+
+class Cliente:
+    """
+    Clase que representa a un cliente en el sistema de reservas.
+    """
+    def __init__(self, nombre, correo):
+        self.nombre = nombre
+        self.correo = correo
+
+    def __str__(self):
+        return f"Cliente: {self.nombre}, Correo: {self.correo}"
+
+class Servicio:
+    """
+    Clase que representa un servicio que puede ser reservado.
+    """
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
+
+    def __str__(self):
+        return f"Servicio: {self.nombre}, Precio: ${self.precio:.2f}"
+
+class Reserva:
+    """
+    Clase que representa una reserva hecha por un cliente.
+    """
+    def __init__(self, cliente, servicio, fecha):
+        self.cliente = cliente
+        self.servicio = servicio
+        self.fecha = fecha
+
+    def __str__(self):
+        return f"Reserva para {self.cliente.nombre} el {self.fecha} para el servicio '{self.servicio.nombre}'"
+
+if __name__ == "__main__":
+    # Crear servicios disponibles
+    spa = Servicio("Spa", 50.00)
+    gimnasio = Servicio("Gimnasio", 30.00)
+
+    # Crear un cliente
+    cliente1 = Cliente("Juan Pérez", "juanperez@example.com")
+
+    # Crear reservas para el cliente
+    reserva1 = Reserva(cliente1, spa, "2025-01-15")
+    reserva2 = Reserva(cliente1, gimnasio, "2025-01-20")
+
+    # Mostrar información de las reservas
+    print(reserva1)
+    print(reserva2)
