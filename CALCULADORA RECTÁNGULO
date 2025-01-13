@@ -1,0 +1,34 @@
+# Programa: Calculadora de área y perímetro de un rectángulo
+# Descripción: Este programa solicita al usuario las dimensiones de un rectángulo
+# (largo y ancho) y calcula su área y perímetro. Demuestra el uso de tipos de
+# datos como enteros, flotantes, cadenas de texto y booleanos.
+
+def calcular_area(largo, ancho):
+    """Calcula el área de un rectángulo dado su largo y ancho."""
+    return largo * ancho
+
+def calcular_perimetro(largo, ancho):
+    """Calcula el perímetro de un rectángulo dado su largo y ancho."""
+    return 2 * (largo + ancho)
+
+if __name__ == "__main__":
+    # Solicitar dimensiones al usuario
+    print("Calculadora de área y perímetro de un rectángulo")
+    largo = float(input("Ingrese el largo del rectángulo (en metros): "))
+    ancho = float(input("Ingrese el ancho del rectángulo (en metros): "))
+
+    # Verificar si las dimensiones son válidas
+    dimensiones_validas = largo > 0 and ancho > 0
+
+    if dimensiones_validas:
+        # Calcular área y perímetro
+        area = calcular_area(largo, ancho)
+        perimetro = calcular_perimetro(largo, ancho)
+
+        # Mostrar resultados
+        print(f"\nDimensiones del rectángulo:")
+        print(f"Largo: {largo} m, Ancho: {ancho} m")
+        print(f"Área: {area} m²")
+        print(f"Perímetro: {perimetro} m")
+    else:
+        print("\nError: Las dimensiones deben ser mayores que cero.")
