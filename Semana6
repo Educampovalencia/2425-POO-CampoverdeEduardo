@@ -1,0 +1,50 @@
+# Clase base que representa un Vehículo
+class Vehiculo:
+    def __init__(self, marca, modelo):
+        self._marca = marca  # Atributo protegido (encapsulación)
+        self._modelo = modelo  # Atributo protegido (encapsulación)
+
+    # Método público para obtener información del vehículo
+    def obtener_info(self):
+        return f"Marca: {self._marca}, Modelo: {self._modelo}"
+
+    # Método genérico para demostrar polimorfismo
+    def encender(self):
+        return "El vehículo está encendido."
+
+# Clase derivada que representa un Coche (herencia)
+class Coche(Vehiculo):
+    def __init__(self, marca, modelo, numero_puertas):
+        super().__init__(marca, modelo)  # Llamada al constructor de la clase base
+        self._numero_puertas = numero_puertas  # Atributo protegido adicional
+
+    # Sobrescritura de método (polimorfismo)
+    def encender(self):
+        return f"El coche {self._marca} {self._modelo} está encendido con {self._numero_puertas} puertas."
+
+# Clase derivada que representa una Moto (herencia)
+class Moto(Vehiculo):
+    def __init__(self, marca, modelo, tipo):
+        super().__init__(marca, modelo)  # Llamada al constructor de la clase base
+        self._tipo = tipo  # Atributo protegido adicional
+
+    # Sobrescritura de método (polimorfismo)
+    def encender(self):
+        return f"La moto {self._marca} {self._modelo}, tipo {self._tipo}, está encendida."
+
+# Instanciación de objetos y demostración de funcionalidad
+if __name__ == "__main__":
+    # Creación de un objeto de la clase base
+    vehiculo = Vehiculo("Genérico", "ModeloX")
+    print(vehiculo.obtener_info())
+    print(vehiculo.encender())
+
+    # Creación de un objeto de la clase derivada Coche
+    coche = Coche("Toyota", "Corolla", 4)
+    print(coche.obtener_info())
+    print(coche.encender())
+
+    # Creación de un objeto de la clase derivada Moto
+    moto = Moto("Yamaha", "R3", "Deportiva")
+    print(moto.obtener_info())
+    print(moto.encender())
