@@ -1,0 +1,54 @@
+# Clase Persona que implementa un constructor y un destructor
+class Persona:
+    def __init__(self, nombre, edad):
+        """
+        Constructor de la clase Persona.
+        Inicializa los atributos nombre y edad con los valores proporcionados.
+        """
+        self.nombre = nombre
+        self.edad = edad
+        print(f"[Constructor] Persona {self.nombre} creada con éxito.")
+
+    def __del__(self):
+        """
+        Destructor de la clase Persona.
+        Este método se invoca automáticamente cuando el objeto es destruido.
+        """
+        print(f"[Destructor] Persona {self.nombre} eliminada.")
+
+# Clase Archivo que simula la gestión de un archivo con constructor y destructor
+class Archivo:
+    def __init__(self, nombre_archivo):
+        """
+        Constructor de la clase Archivo.
+        Abre un archivo en modo escritura y almacena el descriptor.
+        """
+        self.nombre_archivo = nombre_archivo
+        self.archivo = open(self.nombre_archivo, 'w')
+        print(f"[Constructor] Archivo '{self.nombre_archivo}' creado y listo para escribir.")
+
+    def escribir(self, texto):
+        """
+        Método para escribir texto en el archivo.
+        """
+        self.archivo.write(texto)
+        print(f"[Archivo] Texto escrito en '{self.nombre_archivo}'.")
+
+    def __del__(self):
+        """
+        Destructor de la clase Archivo.
+        Cierra el archivo abierto.
+        """
+        self.archivo.close()
+        print(f"[Destructor] Archivo '{self.nombre_archivo}' cerrado correctamente.")
+
+# Ejemplo de uso de las clases
+if __name__ == "__main__":
+    # Crear una instancia de la clase Persona
+    persona = Persona("Eduardo", 25)
+
+    # Crear una instancia de la clase Archivo
+    archivo = Archivo("ejemplo.txt")
+    archivo.escribir("Este es un ejemplo de uso de constructores y destructores en Python.")
+
+    # Fin del programa. Los destructores se invocan automáticamente al finalizar.
