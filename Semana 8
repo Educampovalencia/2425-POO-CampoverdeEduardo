@@ -1,0 +1,107 @@
+# Archivo: Dashboard.py
+# Sistema de gestión de tareas orientado a objetos
+
+import json
+
+class Task:
+    def __init__(self, title, description, priority="Normal"):
+        self.title = title
+        self.description = description
+        self.priority = priority
+
+    def __str__(self):
+        return f"Título: {self.title}, Descripción: {self.description}, Prioridad: {self.priority}"
+
+
+class Dashboard:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, title, description, priority="Normal"):
+        new_task = Task(title, description, priority)
+        self.tasks.append(new_task)
+        print("Tarea añadida exitosamente.")
+
+    def list_tasks(self):
+        if not self.tasks:
+            print("No hay tareas en el sistema.")
+        else:
+            for idx, task in enumerate(self.tasks):
+                print(f"{idx + 1}. {task}")
+
+    def edit_task(self, task_index, title=None, description=None, priority=None):
+        if 0 <= task_index < len(self.tasks):
+            task = self.tasks[task_index]
+            task.title = title if title else task.title
+            task.description = description if description else task.description
+            task.priority = priority if priority else task.priority
+            print("Tarea editada exitosamente.")
+        else:
+            print("Índice de tarea inválido.")
+
+    def delete_task(self, task_index):
+        if 0 <= task_index < len(self.tasks):
+            self.tasks.pop(task_index)
+            print("Tarea eliminada exitosamente.")
+        else:
+            print("Índice de tarea inválido.")
+
+    def save_to_file(self, filename="tasks.json"):
+        with open(filename, "w") as file:
+            json.dump([task.__dict__ for task in self.tasks], file, indent=4)
+        print(f"Tareas guardadas en {filename}.")
+
+    def load_from_file(self, filename="tasks.json"):
+        try:
+            with open(filename, "r") as file:
+                data = json.load(file)
+                self.tasks = [Task(**task) for task in data]
+            print(f"Tareas cargadas desde {filename}.")
+        except FileNotFoundError:
+            print(f"El archivo {filename} no existe.")
+
+def main():
+    dashboard = Dashboard()
+    while True:
+        print("\n--- Dashboard de Tareas ---")
+        print("1. Agregar Tarea")
+        print("2. Listar Tareas")
+        print("3. Editar Tarea")
+        print("4. Eliminar Tarea")
+        print("5. Guardar Tareas en Archivo")
+        print("6. Cargar Tareas desde Archivo")
+        print("7. Salir")
+        choice = input("Selecciona una opción: ")
+
+        if choice == "1":
+            title = input("Título: ")
+            description = input("Descripción: ")
+            priority = input("Prioridad (Alta, Normal, Baja): ")
+            dashboard.add_task(title, description, priority)
+        elif choice == "2":
+            dashboard.list_tasks()
+        elif choice == "3":
+            dashboard.list_tasks()
+            task_index = int(input("Índice de la tarea a editar: ")) - 1
+            title = input("Nuevo título (deja en blanco para no cambiar): ")
+            description = input("Nueva descripción (deja en blanco para no cambiar): ")
+            priority = input("Nueva prioridad (deja en blanco para no cambiar): ")
+            dashboard.edit_task(task_index, title, description, priority)
+        elif choice == "4":
+            dashboard.list_tasks()
+            task_index = int(input("Índice de la tarea a eliminar: ")) - 1
+            dashboard.delete_task(task_index)
+        elif choice == "5":
+            filename = input("Nombre del archivo (default: tasks.json): ") or "tasks.json"
+            dashboard.save_to_file(filename)
+        elif choice == "6":
+            filename = input("Nombre del archivo (default: tasks.json): ") or "tasks.json"
+            dashboard.load_from_file(filename)
+        elif choice == "7":
+            print("Saliendo del sistema. ¡Hasta luego!")
+            break
+        else:
+            print("Opción no válida. Intenta de nuevo.")
+
+if __name__ == "__main__":
+    main()
