@@ -1,0 +1,132 @@
+import json
+
+class Producto:
+    def __init__(self, id_producto: str, nombre: str, cantidad: int, precio: float):
+        self.id_producto = id_producto
+        self.nombre = nombre
+        self.cantidad = cantidad
+        self.precio = precio
+    
+    def actualizar_cantidad(self, nueva_cantidad: int):
+        self.cantidad = nueva_cantidad
+    
+    def actualizar_precio(self, nuevo_precio: float):
+        self.precio = nuevo_precio
+    
+    def obtener_info(self):
+        return {
+            "ID": self.id_producto,
+            "Nombre": self.nombre,
+            "Cantidad": self.cantidad,
+            "Precio": self.precio
+        }
+
+class Inventario:
+    def __init__(self, archivo="inventario.json"):
+        self.productos = {}
+        self.archivo = archivo
+        self.cargar_desde_archivo()
+    
+    def agregar_producto(self, producto: Producto):
+        if producto.id_producto in self.productos:
+            print("El producto con este ID ya existe.")
+        else:
+            self.productos[producto.id_producto] = producto
+            self.guardar_en_archivo()
+            print("Producto agregado correctamente.")
+    
+    def eliminar_producto(self, id_producto: str):
+        if id_producto in self.productos:
+            del self.productos[id_producto]
+            self.guardar_en_archivo()
+            print("Producto eliminado correctamente.")
+        else:
+            print("El producto no existe en el inventario.")
+    
+    def actualizar_producto(self, id_producto: str, cantidad=None, precio=None):
+        if id_producto in self.productos:
+            if cantidad is not None:
+                self.productos[id_producto].actualizar_cantidad(cantidad)
+            if precio is not None:
+                self.productos[id_producto].actualizar_precio(precio)
+            self.guardar_en_archivo()
+            print("Producto actualizado correctamente.")
+        else:
+            print("El producto no se encuentra en el inventario.")
+    
+    def buscar_producto(self, nombre: str):
+        encontrados = [p.obtener_info() for p in self.productos.values() if p.nombre.lower() == nombre.lower()]
+        if encontrados:
+            for producto in encontrados:
+                print(producto)
+        else:
+            print("No se encontraron productos con ese nombre.")
+    
+    def mostrar_inventario(self):
+        if self.productos:
+            for producto in self.productos.values():
+                print(producto.obtener_info())
+        else:
+            print("El inventario está vacío.")
+    
+    def guardar_en_archivo(self):
+        with open(self.archivo, "w") as file:
+            json.dump({id: prod.obtener_info() for id, prod in self.productos.items()}, file, indent=4)
+    
+    def cargar_desde_archivo(self):
+        try:
+            with open(self.archivo, "r") as file:
+                datos = json.load(file)
+                self.productos = {id: Producto(id, p["Nombre"], p["Cantidad"], p["Precio"]) for id, p in datos.items()}
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.productos = {}
+
+# Menú interactivo
+def menu():
+    inventario = Inventario()
+    while True:
+        print("\nSistema de Gestión de Inventario")
+        print("1. Agregar producto")
+        print("2. Eliminar producto")
+        print("3. Actualizar producto")
+        print("4. Buscar producto por nombre")
+        print("5. Mostrar inventario")
+        print("6. Salir")
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            id_producto = input("Ingrese el ID del producto: ")
+            nombre = input("Ingrese el nombre del producto: ")
+            cantidad = int(input("Ingrese la cantidad: "))
+            precio = float(input("Ingrese el precio: "))
+            producto = Producto(id_producto, nombre, cantidad, precio)
+            inventario.agregar_producto(producto)
+        
+        elif opcion == "2":
+            id_producto = input("Ingrese el ID del producto a eliminar: ")
+            inventario.eliminar_producto(id_producto)
+        
+        elif opcion == "3":
+            id_producto = input("Ingrese el ID del producto a actualizar: ")
+            cantidad = input("Ingrese la nueva cantidad (deje vacío si no desea cambiar): ")
+            precio = input("Ingrese el nuevo precio (deje vacío si no desea cambiar): ")
+            cantidad = int(cantidad) if cantidad else None
+            precio = float(precio) if precio else None
+            inventario.actualizar_producto(id_producto, cantidad, precio)
+        
+        elif opcion == "4":
+            nombre = input("Ingrese el nombre del producto a buscar: ")
+            inventario.buscar_producto(nombre)
+        
+        elif opcion == "5":
+            inventario.mostrar_inventario()
+        
+        elif opcion == "6":
+            print("Saliendo del sistema...")
+            break
+        
+        else:
+            print("Opción no válida, intente nuevamente.")
+
+if __name__ == "__main__":
+    menu()
