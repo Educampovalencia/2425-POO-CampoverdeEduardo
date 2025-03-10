@@ -1,0 +1,66 @@
+class Libro:
+    def __init__(self, titulo, autor, categoria, isbn):
+        self.info = (titulo, autor)  # Tupla para atributos inmutables
+        self.categoria = categoria
+        self.isbn = isbn
+    
+    def __str__(self):
+        return f"{self.info[0]} de {self.info[1]} (Categoría: {self.categoria}, ISBN: {self.isbn})"
+
+class Usuario:
+    def __init__(self, nombre, user_id):
+        self.nombre = nombre
+        self.user_id = user_id  # ID único asegurado con un conjunto en Biblioteca
+        self.libros_prestados = []  # Lista de libros prestados
+    
+    def prestar_libro(self, libro):
+        self.libros_prestados.append(libro)
+    
+    def devolver_libro(self, isbn):
+        self.libros_prestados = [libro for libro in self.libros_prestados if libro.isbn != isbn]
+    
+    def listar_libros_prestados(self):
+        return [str(libro) for libro in self.libros_prestados]
+    
+    def __str__(self):
+        return f"Usuario: {self.nombre} (ID: {self.user_id})"
+
+class Biblioteca:
+    def __init__(self):
+        self.libros_disponibles = {}  # Diccionario {ISBN: Libro}
+        self.usuarios_registrados = {}  # Diccionario {ID: Usuario}
+        self.ids_usuarios = set()  # Conjunto para IDs únicos
+    
+    def agregar_libro(self, libro):
+        if libro.isbn not in self.libros_disponibles:
+            self.libros_disponibles[libro.isbn] = libro
+            print(f"Libro agregado: {libro}")
+        else:
+            print("El libro ya está en la biblioteca.")
+    
+    def eliminar_libro(self, isbn):
+        if isbn in self.libros_disponibles:
+            del self.libros_disponibles[isbn]
+            print(f"Libro con ISBN {isbn} eliminado.")
+        else:
+            print("El libro no existe en la biblioteca.")
+    
+    def registrar_usuario(self, usuario):
+        if usuario.user_id not in self.ids_usuarios:
+            self.ids_usuarios.add(usuario.user_id)
+            self.usuarios_registrados[usuario.user_id] = usuario
+            print(f"Usuario registrado: {usuario}")
+        else:
+            print("El usuario ya está registrado.")
+    
+    def dar_baja_usuario(self, user_id):
+        if user_id in self.usuarios_registrados:
+            del self.usuarios_registrados[user_id]
+            self.ids_usuarios.remove(user_id)
+            print(f"Usuario con ID {user_id} eliminado.")
+        else:
+            print("El usuario no está registrado.")
+    
+    def prestar_libro(self, user_id, isbn):
+        if user_id in self.usuarios_registrados and isbn in self.libros_disponibles:
+            usuario = self.usuarios_registrados[user_id]
